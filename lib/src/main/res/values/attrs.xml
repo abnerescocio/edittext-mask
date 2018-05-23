@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TextInputEditTextMask">
+
+        <attr name="mask" format="enum">
+            <enum name="email" value="100"/>
+        </attr>
+
+    </declare-styleable>
+</resources>
