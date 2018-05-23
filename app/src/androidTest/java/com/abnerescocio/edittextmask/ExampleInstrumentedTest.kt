@@ -1,4 +1,4 @@
-package com.abnerescocio.edittext_mask
+package com.abnerescocio.edittextmask
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
