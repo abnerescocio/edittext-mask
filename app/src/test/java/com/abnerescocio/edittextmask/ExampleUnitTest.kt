@@ -1,4 +1,4 @@
-package com.abnerescocio.edittext_mask
+package com.abnerescocio.edittextmask
 
 import org.junit.Test
 
