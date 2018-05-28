@@ -4,6 +4,7 @@
 
         <attr name="mask" format="enum">
             <enum name="email" value="100"/>
+            <enum name="phone" value="200"/>/>
         </attr>
 
     </declare-styleable>
