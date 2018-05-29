@@ -2,10 +2,8 @@ package com.abnerescocio.lib
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Rect
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
-import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.AttributeSet
 
 class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
@@ -26,13 +24,8 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
                 R.styleable.TextInputEditTextMask, 0, 0)
         maskIdentifer = typeArray?.getInt(R.styleable.TextInputEditTextMask_mask, 0)
         mask = MASK.valueOf(maskIdentifer)
-        if (mask == MASK.PHONE) addTextChangedListener(PhoneNumberFormattingTextWatcher())
+        mask?.getWatcher(this)?.let { addTextChangedListener(it) }
         typeArray?.recycle()
-    }
-
-    override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
-        super.onFocusChanged(focused, direction, previouslyFocusedRect)
-        if (focused) hint = mask?.getHint()
     }
 
     override fun onTextChanged(text: CharSequence?, start: Int, lengthBefore: Int, lengthAfter: Int) {
