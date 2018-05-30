@@ -49,6 +49,36 @@ enum class MASK(private val id: Int?) {
         override fun getWatcher(view: TextView): TextWatcher? {
             return CpfTextWatcher(view)
         }
+    },
+
+    IP(TextInputEditTextMask.IP) {
+        override fun getRegex(): Regex {
+            return Regex(Patterns.IP_ADDRESS.pattern())
+        }
+
+
+        override fun getStringResIdToNoMatch(): Int {
+            return R.string.no_match_ip
+        }
+
+        override fun getWatcher(view: TextView): TextWatcher? {
+            return null
+        }
+    },
+
+    WEB_URL(TextInputEditTextMask.WEB_URL) {
+        override fun getRegex(): Regex {
+            return Regex(Patterns.WEB_URL.pattern())
+        }
+
+
+        override fun getStringResIdToNoMatch(): Int {
+            return R.string.no_match_web_url
+        }
+
+        override fun getWatcher(view: TextView): TextWatcher? {
+            return null
+        }
     };
 
     abstract fun getRegex(): Regex

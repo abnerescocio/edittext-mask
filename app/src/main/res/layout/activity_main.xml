@@ -18,8 +18,8 @@
             android:id="@+id/text_input_edit_text_mask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"
-            app:mask="brazilian_cpf" />
+            android:inputType="text"
+            app:mask="web_url" />
 
     </android.support.design.widget.TextInputLayout>
 

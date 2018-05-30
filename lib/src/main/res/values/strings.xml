@@ -1,7 +1,11 @@
 <resources>
+
     <string name="app_name">edittext-mask</string>
 
     <string name="no_match_email">Invalid e-mail</string>
     <string name="no_match_phone">Invalid phone number</string>
+    <string name="no_match_ip">Invalid ip address</string>
+    <string name="no_match_web_url">Invalid url</string>
     <string name="no_match_brazilian_cpf">Invalid cpf</string>
+
 </resources>
