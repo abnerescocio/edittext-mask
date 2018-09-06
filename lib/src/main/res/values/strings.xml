@@ -7,5 +7,6 @@
     <string name="no_match_ip">Invalid ip address</string>
     <string name="no_match_web_url">Invalid url</string>
     <string name="no_match_brazilian_cpf">Invalid cpf</string>
+    <string name="no_match_brazilian_cnpj">Invalid cnpj</string>
 
 </resources>

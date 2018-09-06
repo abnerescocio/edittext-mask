@@ -41,7 +41,6 @@ enum class MASK(private val id: Int?) {
             return Regex("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")
         }
 
-
         override fun getStringResIdToNoMatch(): Int {
             return R.string.no_match_brazilian_cpf
         }
@@ -51,11 +50,24 @@ enum class MASK(private val id: Int?) {
         }
     },
 
+    CNPJ(TextInputEditTextMask.BRAZILIAN_CNPJ) {
+        override fun getRegex(): Regex {
+            return Regex("\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}")
+        }
+
+        override fun getStringResIdToNoMatch(): Int {
+            return R.string.no_match_brazilian_cnpj
+        }
+
+        override fun getWatcher(view: TextView): TextWatcher? {
+            return null
+        }
+    },
+
     IP(TextInputEditTextMask.IP) {
         override fun getRegex(): Regex {
             return Regex(Patterns.IP_ADDRESS.pattern())
         }
-
 
         override fun getStringResIdToNoMatch(): Int {
             return R.string.no_match_ip

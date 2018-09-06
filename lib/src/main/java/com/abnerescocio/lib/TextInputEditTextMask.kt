@@ -55,6 +55,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         const val BRAZILIAN_PHONE_NUMBER = 1001
         const val BRAZILIAN_RG = 1002
         const val BRAZILIAN_CPF = 1003
+        const val BRAZILIAN_CNPJ = 1004
         const val UNITED_STATES_PHONE_NUMBER = 1101
     }
 }
