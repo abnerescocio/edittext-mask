@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
+import android.text.InputFilter
 import android.util.AttributeSet
 
 class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
@@ -24,6 +25,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
                 R.styleable.TextInputEditTextMask, 0, 0)
         maskIdentifer = typeArray?.getInt(R.styleable.TextInputEditTextMask_mask, 0)
         mask = MASK.valueOf(maskIdentifer)
+        mask?.getMaxLenght()?.let { filters = arrayOf(InputFilter.LengthFilter(it)) }
         mask?.getWatcher(this)?.let { addTextChangedListener(it) }
         typeArray?.recycle()
     }
@@ -32,7 +34,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         val inputLayout = parent?.parent
         if (inputLayout is TextInputLayout) {
             if (mask != null && text?.length?.compareTo(LENGTH_ZERO) == GREATER_THAN) {
-                mask?.getRegex()?.matches(text)?.let {
+                mask?.getRegex()?.matches(text)?.and(mask?.isValid(text) ?: false)?.let {
                     if (it) inputLayout.error = null
                     else inputLayout.error = context.getString(mask?.getStringResIdToNoMatch()!!)
                 }
@@ -48,14 +50,10 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         private const val EQUALS_THAN = 1
 
         const val EMAIL = 100
-        const val EMAIL_GMAIL = 101
         const val PHONE = 200
         const val IP = 300
         const val WEB_URL = 400
-        const val BRAZILIAN_PHONE_NUMBER = 1001
-        const val BRAZILIAN_RG = 1002
         const val BRAZILIAN_CPF = 1003
         const val BRAZILIAN_CNPJ = 1004
-        const val UNITED_STATES_PHONE_NUMBER = 1101
     }
 }
