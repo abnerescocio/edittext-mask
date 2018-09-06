@@ -110,7 +110,31 @@ enum class MASK(private val id: Int?) {
         }
 
         override fun isValid(char: CharSequence): Boolean {
-            return true
+            val cnpj = char.replace(Regex("\\D"), "")
+            if (cnpj.length < 14) return false
+
+            var digit1 = 0
+            for (i in 5 downTo 2) {
+                digit1 += cnpj[5 - i].toString().toInt() * i
+            }
+            for (i in 9 downTo 2) {
+                digit1 += cnpj[9 - i + 4].toString().toInt() * i
+            }
+            digit1 %= 11
+            digit1 = if (digit1 < 2) 0 else 11 - digit1
+
+            var digit2 = 0
+            for (i in 6 downTo 2) {
+                digit2 += cnpj[6 - i].toString().toInt() * i
+            }
+            for (i in 9 downTo 3) {
+                digit2 += cnpj[9 - i + 5].toString().toInt() * i
+            }
+            digit2 += digit1 * 2
+            digit2 %= 11
+            digit2 = if (digit2 < 2) 0 else 11 - digit2
+
+            return cnpj[12].toString().toInt() == digit1 && cnpj[13].toString().toInt() == digit2
         }
     },
 
