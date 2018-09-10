@@ -56,6 +56,8 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
             if (isRequired == true && text.isEmpty()) {
                 inputLayout.error = requiredErrorMsg ?: context.getString(R.string.required_field)
                 return
+            } else if (isRequired == true && text.isNotEmpty()) {
+                inputLayout.error = null
             }
 
             if (mask != null && text.isNotEmpty()) {
