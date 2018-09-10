@@ -12,9 +12,4 @@ class CNPJTextWatcher(view: TextView) : AppTextWatcher(view) {
             if (editable?.length == 15) editable.insert(15, "-")
         }
     }
-
-    fun isValidCPF(): Boolean {
-
-        return false
-    }
 }

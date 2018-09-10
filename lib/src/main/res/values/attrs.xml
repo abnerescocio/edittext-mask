@@ -13,6 +13,12 @@
 
         </attr>
 
+        <attr name="mask_errorMsg" format="string"/>
+
+        <attr name="required" format="boolean"/>
+
+        <attr name="required_errorMsg" format="string"/>
+
     </declare-styleable>
 
 </resources>
