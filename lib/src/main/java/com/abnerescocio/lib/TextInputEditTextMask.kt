@@ -67,6 +67,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         if (inputLayout is TextInputLayout) {
             if (isRequired == true && text.isEmpty()) {
                 inputLayout.error = requiredErrorMsg ?: context.getString(R.string.required_field)
+                isValid = false
                 return
             } else if (isRequired == true && text.isNotEmpty()) {
                 inputLayout.error = null
