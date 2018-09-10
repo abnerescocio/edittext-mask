@@ -2,6 +2,7 @@ package com.abnerescocio.lib
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.Rect
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.text.InputFilter
@@ -17,6 +18,8 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     var maskErrorMsg: String? = null
     var isRequired: Boolean? = false
     var requiredErrorMsg: String? = null
+    var isValid: Boolean = false
+        private set
 
     private var mask: MASK? = null
 
@@ -51,6 +54,15 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     }
 
     override fun onTextChanged(text: CharSequence, start: Int, lengthBefore: Int, lengthAfter: Int) {
+        fieldValidator()
+    }
+
+    override fun requestFocus(direction: Int, previouslyFocusedRect: Rect?): Boolean {
+        fieldValidator()
+        return super.requestFocus(direction, previouslyFocusedRect)
+    }
+
+    private fun fieldValidator() {
         val inputLayout = parent?.parent
         if (inputLayout is TextInputLayout) {
             if (isRequired == true && text.isEmpty()) {
@@ -68,6 +80,8 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
             } else if (text.isEmpty()) {
                 inputLayout.error = null
             }
+
+            isValid = inputLayout.error == null
         }
     }
 
