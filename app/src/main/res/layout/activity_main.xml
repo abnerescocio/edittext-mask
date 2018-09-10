@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             app:mask="brazilian_cpf"
             app:mask_errorMsg="Cpf inválido"
-            app:required="true"
+            app:required="false"
             app:required_errorMsg="CPF obrigatório"/>
 
     </android.support.design.widget.TextInputLayout>

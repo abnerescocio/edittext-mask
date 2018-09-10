@@ -12,5 +12,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         text_input_edit_text_mask.setMask(TextInputEditTextMask.BRAZILIAN_CNPJ)
+        text_input_edit_text_mask.requiredErrorMsg = "CNPJ obrigatório"
+        text_input_edit_text_mask.maskErrorMsg = "CNPJ incorreto"
+        text_input_edit_text_mask.isRequired = true
     }
 }
