@@ -14,9 +14,9 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     private var defStyleAttr: Int = 0
     private var typeArray: TypedArray? = null
     private var maskIdentifer: Int? = null
-    private var maskErrorMsg: String? = null
-    private var isRequired: Boolean? = false
-    private var requiredErrorMsg: String? = null
+    var maskErrorMsg: String? = null
+    var isRequired: Boolean? = false
+    var requiredErrorMsg: String? = null
 
     private var mask: MASK? = null
 
