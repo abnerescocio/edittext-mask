@@ -65,20 +65,21 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     private fun fieldValidator() {
         val inputLayout = parent?.parent
         if (inputLayout is TextInputLayout) {
-            if (isRequired == true && text.isEmpty()) {
+            if (isRequired == true && text?.isEmpty() == true) {
                 inputLayout.error = requiredErrorMsg ?: context.getString(R.string.required_field)
                 isValid = false
                 return
-            } else if (isRequired == true && text.isNotEmpty()) {
+            } else if (isRequired == true && text?.isNotEmpty() == true) {
                 inputLayout.error = null
             }
 
-            if (mask != null && text.isNotEmpty()) {
-                mask?.getRegex()?.matches(text)?.and(mask?.isValid(text) ?: false)?.let {
+            if (mask != null && text?.isNotEmpty() == true) {
+                mask?.getRegex()?.matches(text ?: "")?.
+                        and(mask?.isValid(text ?: "") ?: false)?.let {
                     if (it) inputLayout.error = null
                     else inputLayout.error = maskErrorMsg ?: mask?.getStringResIdToNoMatch()?.let { it1 -> context.getString(it1) }
                 }
-            } else if (text.isEmpty()) {
+            } else if (text?.isEmpty() == true) {
                 inputLayout.error = null
             }
 
@@ -95,8 +96,6 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     }
 
     companion object {
-        private const val TAG = "edittext-mask"
-
         const val EMAIL = 100
         const val PHONE = 200
         const val IP = 300
