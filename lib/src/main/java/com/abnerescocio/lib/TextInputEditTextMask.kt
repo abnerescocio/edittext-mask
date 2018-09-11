@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout
 import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.AttributeSet
+import java.util.regex.PatternSyntaxException
 
 class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     : TextInputEditText(context, attributeSet) {
@@ -18,6 +19,8 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     var maskErrorMsg: String? = null
     var isRequired: Boolean? = false
     var requiredErrorMsg: String? = null
+    var range: String? = null
+    var rangeErrorMsg: String? = null
     var isValid: Boolean = false
         private set
 
@@ -37,6 +40,8 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         maskErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_mask_errorMsg)
         isRequired = typeArray?.getBoolean(R.styleable.TextInputEditTextMask_required, false)
         requiredErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_required_errorMsg)
+        range = typeArray?.getString(R.styleable.TextInputEditTextMask_range)
+        rangeErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_range_errorMsg)
 
         createMask()
 
@@ -71,6 +76,18 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
                 return
             } else if (isRequired == true && text?.isNotEmpty() == true) {
                 inputLayout.error = null
+            }
+
+            try {
+                range?.let { pattern ->
+                    if (Regex(pattern).matches(text)) inputLayout.error = null
+                    else {
+                        inputLayout.error = rangeErrorMsg ?: context.getString(R.string.invalid_range)
+                        return
+                    }
+                }
+            } catch (e: PatternSyntaxException) {
+                throw PatternSyntaxException("Range is not a valid regex. Valid ex.: [0-99], [2-6], [a-Z]", range, e.index)
             }
 
             if (mask != null && text?.isNotEmpty() == true) {
