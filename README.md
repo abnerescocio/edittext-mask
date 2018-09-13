@@ -22,7 +22,7 @@ allprojects {
 
 ```
 dependencies {
-    implementation 'com.github.abnerescocio:edittext-mask:1.0'
+    implementation 'com.github.abnerescocio:edittext-mask:1.3.0'
 }
 ```
 
