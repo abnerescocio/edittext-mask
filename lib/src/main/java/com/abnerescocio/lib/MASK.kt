@@ -54,6 +54,29 @@ enum class MASK(private val id: Int?) {
         }
     },
 
+    CARD(TextInputEditTextMask.CARD) {
+        override fun getRegex(): Regex {
+            return Regex("")
+        }
+
+        override fun getStringResIdToNoMatch(): Int {
+            return R.string.no_match_card
+        }
+
+        override fun getWatcher(view: TextView): TextWatcher? {
+            return null
+        }
+
+        override fun getMaxLength(): Int? {
+            return null
+        }
+
+        override fun isValid(char: CharSequence): Boolean {
+            return true
+        }
+
+    },
+
     CPF(TextInputEditTextMask.BRAZILIAN_CPF) {
         override fun getRegex(): Regex {
             return Regex(RGX_CPF)
