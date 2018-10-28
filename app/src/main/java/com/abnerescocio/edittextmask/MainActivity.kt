@@ -10,10 +10,5 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        text_input_edit_text_mask.setMask(TextInputEditTextMask.BRAZILIAN_CNPJ)
-        text_input_edit_text_mask.requiredErrorMsg = "CNPJ obrigatório"
-        text_input_edit_text_mask.maskErrorMsg = "CNPJ incorreto"
-        text_input_edit_text_mask.isRequired = true
     }
 }
