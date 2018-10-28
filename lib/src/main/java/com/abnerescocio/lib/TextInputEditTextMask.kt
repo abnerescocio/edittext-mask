@@ -15,7 +15,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
 
     private var defStyleAttr: Int = 0
     private var typeArray: TypedArray? = null
-    private var maskIdentifer: Int? = null
+    private var maskIdentifier: Int? = null
     var maskErrorMsg: String? = null
     var isRequired: Boolean? = false
     var requiredErrorMsg: String? = null
@@ -36,7 +36,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         typeArray = context?.theme?.obtainStyledAttributes(attributeSet,
                 R.styleable.TextInputEditTextMask, 0, 0)
 
-        maskIdentifer = typeArray?.getInt(R.styleable.TextInputEditTextMask_mask, 0)
+        maskIdentifier = typeArray?.getInt(R.styleable.TextInputEditTextMask_mask, 0)
         maskErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_mask_errorMsg)
         isRequired = typeArray?.getBoolean(R.styleable.TextInputEditTextMask_required, false)
         requiredErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_required_errorMsg)
@@ -50,7 +50,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
 
     private fun createMask() {
         removeTextChangedListener(currentWatcher)
-        mask = MASK.valueOf(maskIdentifer)
+        mask = MASK.valueOf(maskIdentifier)
         mask?.getMaxLength()?.let { filters = arrayOf(InputFilter.LengthFilter(it)) }
         mask?.getWatcher(this)?.let {
             currentWatcher = it
@@ -108,7 +108,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     annotation class MaskIdentifier(vararg val value: Int)
 
     fun setMask(identifier: @MaskIdentifier(EMAIL, PHONE, IP, WEB_URL, BRAZILIAN_CPF, BRAZILIAN_CNPJ) Int) {
-        maskIdentifer = identifier
+        maskIdentifier = identifier
         createMask()
     }
 
@@ -117,6 +117,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         const val PHONE = 200
         const val IP = 300
         const val WEB_URL = 400
+        const val CARD = 500
         const val BRAZILIAN_CPF = 1003
         const val BRAZILIAN_CNPJ = 1004
         const val BRAZILIAN_CEP = 1005
