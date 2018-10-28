@@ -10,6 +10,7 @@
             <enum name="web_url" value="400"/>
             <enum name="brazilian_cpf" value="1003"/>
             <enum name="brazilian_cnpj" value="1004"/>
+            <enum name="brazilian_cep" value="1005"/>
 
         </attr>
 

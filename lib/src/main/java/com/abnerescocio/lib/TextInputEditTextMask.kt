@@ -51,7 +51,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     private fun createMask() {
         removeTextChangedListener(currentWatcher)
         mask = MASK.valueOf(maskIdentifer)
-        mask?.getMaxLenght()?.let { filters = arrayOf(InputFilter.LengthFilter(it)) }
+        mask?.getMaxLength()?.let { filters = arrayOf(InputFilter.LengthFilter(it)) }
         mask?.getWatcher(this)?.let {
             currentWatcher = it
             addTextChangedListener(currentWatcher)
@@ -119,5 +119,6 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         const val WEB_URL = 400
         const val BRAZILIAN_CPF = 1003
         const val BRAZILIAN_CNPJ = 1004
+        const val BRAZILIAN_CEP = 1005
     }
 }

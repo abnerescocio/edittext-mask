@@ -4,6 +4,7 @@ import android.telephony.PhoneNumberFormattingTextWatcher
 import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.TextView
+import com.abnerescocio.lib.watchers.CEPTextWatcher
 import com.abnerescocio.lib.watchers.CNPJTextWatcher
 import com.abnerescocio.lib.watchers.CPFTextWatcher
 
@@ -22,7 +23,7 @@ enum class MASK(private val id: Int?) {
             return null
         }
 
-        override fun getMaxLenght(): Int? {
+        override fun getMaxLength(): Int? {
             return null
         }
 
@@ -44,7 +45,7 @@ enum class MASK(private val id: Int?) {
             return PhoneNumberFormattingTextWatcher()
         }
 
-        override fun getMaxLenght(): Int? {
+        override fun getMaxLength(): Int? {
             return null
         }
 
@@ -66,7 +67,7 @@ enum class MASK(private val id: Int?) {
             return CPFTextWatcher(view)
         }
 
-        override fun getMaxLenght(): Int? {
+        override fun getMaxLength(): Int? {
             return 11 + 3
         }
 
@@ -105,7 +106,7 @@ enum class MASK(private val id: Int?) {
             return CNPJTextWatcher(view)
         }
 
-        override fun getMaxLenght(): Int? {
+        override fun getMaxLength(): Int? {
             return 14 + 4
         }
 
@@ -138,6 +139,29 @@ enum class MASK(private val id: Int?) {
         }
     },
 
+    CEP(TextInputEditTextMask.BRAZILIAN_CEP) {
+        override fun getRegex(): Regex {
+            return Regex(RGX_CEP)
+        }
+
+        override fun getStringResIdToNoMatch(): Int {
+            return R.string.no_match_brazilian_cep
+        }
+
+        override fun getWatcher(view: TextView): TextWatcher? {
+            return CEPTextWatcher(view)
+        }
+
+        override fun getMaxLength(): Int? {
+            return 9
+        }
+
+        override fun isValid(char: CharSequence): Boolean {
+            return true
+        }
+
+    },
+
     IP(TextInputEditTextMask.IP) {
         override fun getRegex(): Regex {
             return Regex(Patterns.IP_ADDRESS.pattern())
@@ -151,7 +175,7 @@ enum class MASK(private val id: Int?) {
             return null
         }
 
-        override fun getMaxLenght(): Int? {
+        override fun getMaxLength(): Int? {
             return null
         }
 
@@ -173,7 +197,7 @@ enum class MASK(private val id: Int?) {
             return null
         }
 
-        override fun getMaxLenght(): Int? {
+        override fun getMaxLength(): Int? {
             return null
         }
 
@@ -185,12 +209,13 @@ enum class MASK(private val id: Int?) {
     abstract fun getRegex(): Regex
     abstract fun getStringResIdToNoMatch(): Int
     abstract fun getWatcher(view: TextView): TextWatcher?
-    abstract fun getMaxLenght(): Int?
+    abstract fun getMaxLength(): Int?
     abstract fun isValid(char: CharSequence): Boolean
 
     companion object {
         const val RGX_CPF = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"
         const val RGX_CNPJ = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}"
+        const val RGX_CEP = "\\d{5}-\\d{3}"
 
         fun valueOf(id: Int?): MASK? {
             return values().find { it.id == id }
