@@ -18,10 +18,9 @@
             android:id="@+id/text_input_edit_text_mask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mask="brazilian_cpf"
-            app:mask_errorMsg="Cpf inválido"
-            app:required="false"
-            app:required_errorMsg="CPF obrigatório"/>
+            android:inputType="phone"
+            app:mask="brazilian_cnpj"
+            app:required="false"/>
 
     </android.support.design.widget.TextInputLayout>
 
