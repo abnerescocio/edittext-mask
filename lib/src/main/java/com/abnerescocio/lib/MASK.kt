@@ -55,7 +55,7 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    CARD(TextInputEditTextMask.CREDIT_CARD) {
+    CREDIT_CARD(TextInputEditTextMask.CREDIT_CARD) {
         override fun getRegex(): Regex {
             return Regex(RGX_CREDIT_CARD)
         }
