@@ -7,6 +7,7 @@ import android.widget.TextView
 import com.abnerescocio.lib.watchers.CEPTextWatcher
 import com.abnerescocio.lib.watchers.CNPJTextWatcher
 import com.abnerescocio.lib.watchers.CPFTextWatcher
+import com.abnerescocio.lib.watchers.CreditCardTextWatcher
 
 enum class MASK(private val id: Int?) {
 
@@ -54,21 +55,21 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    CARD(TextInputEditTextMask.CARD) {
+    CARD(TextInputEditTextMask.CREDIT_CARD) {
         override fun getRegex(): Regex {
-            return Regex("")
+            return Regex(RGX_CREDIT_CARD)
         }
 
         override fun getStringResIdToNoMatch(): Int {
-            return R.string.no_match_card
+            return R.string.no_match_credit_card
         }
 
         override fun getWatcher(view: TextView): TextWatcher? {
-            return null
+            return CreditCardTextWatcher(view)
         }
 
         override fun getMaxLength(): Int? {
-            return null
+            return 19
         }
 
         override fun isValid(char: CharSequence): Boolean {
@@ -239,6 +240,7 @@ enum class MASK(private val id: Int?) {
         const val RGX_CPF = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"
         const val RGX_CNPJ = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}"
         const val RGX_CEP = "\\d{5}-\\d{3}"
+        const val RGX_CREDIT_CARD = "\\d{4} \\d{4} \\d{4} \\d{4}"
 
         fun valueOf(id: Int?): MASK? {
             return values().find { it.id == id }

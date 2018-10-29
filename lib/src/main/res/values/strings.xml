@@ -12,5 +12,6 @@
     <string name="invalid_range">Invalid range</string>
     <string name="no_match_brazilian_cep">CEP inválido</string>
     <string name="no_match_card">Invalid card</string>
+    <string name="no_match_credit_card">Invalid credit card</string>
 
 </resources>
