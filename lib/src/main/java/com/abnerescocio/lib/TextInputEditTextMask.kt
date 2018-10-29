@@ -117,7 +117,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         const val PHONE = 200
         const val IP = 300
         const val WEB_URL = 400
-        const val CARD = 500
+        const val CREDIT_CARD = 500
         const val BRAZILIAN_CPF = 1003
         const val BRAZILIAN_CNPJ = 1004
         const val BRAZILIAN_CEP = 1005
