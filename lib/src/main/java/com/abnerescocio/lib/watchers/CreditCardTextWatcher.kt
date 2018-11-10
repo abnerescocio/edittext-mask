@@ -18,19 +18,48 @@ class CreditCardTextWatcher(private val view: TextView) : AppTextWatcher(view) {
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
         super.onTextChanged(s, start, before, count)
-        s?.toString()?.replace(" ", "")?.let {
-            when {
-                "4" == it.getOrNull(0).toString() -> {
-                    view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_visa, 0)
+        s?.toString()?.replace(" ", "")?.let { strCardNumber ->
+            val intCardNumber = strCardNumber.toInt()
+            when (strCardNumber.length) {
+                1 -> {
+                    when (intCardNumber) {
+                        4 -> {
+                            add(2, R.drawable.ic_visa)
+                        }
+                    }
                 }
-                "5" == it.getOrNull(0).toString() -> {
-                    view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_mastercard, 0)
+                2 -> {
+                    when (intCardNumber) {
+                        38, 60 -> {
+                            add(2, R.drawable.ic_hipercard)
+                        }
+                        in 23..26, in 51..55 -> {
+                            add(2, R.drawable.ic_mastercard)
+                        }
+                    }
                 }
-                "38" == "${it.getOrNull(0)}${it.getOrNull(1)}" || "60" == "${it.getOrNull(0)}${it.getOrNull(1)}" -> {
-                    view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_hipercard, 0)
+                3 -> {
+                    when (intCardNumber) {
+                        in 223..229, 270, 271 -> {
+                            add(2, R.drawable.ic_mastercard)
+                        }
+                    }
                 }
-                else -> view.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_credit_card_red_24dp, 0)
+                4 -> {
+                    when (intCardNumber) {
+                        in 2221..2229, 2720 -> {
+                            add(2, R.drawable.ic_mastercard)
+                        }
+                    }
+                }
             }
         }
+    }
+
+    private val pool = mutableMapOf<Int, Int>()
+
+    fun add(id: Int, iconId: Int) {
+        pool[id] = iconId
+        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, iconId, 0)
     }
 }
