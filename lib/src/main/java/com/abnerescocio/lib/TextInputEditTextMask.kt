@@ -94,7 +94,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
                 mask?.getRegex()?.matches(text ?: "")?.
                         and(mask?.isValid(text ?: "") ?: false)?.let {
                     if (it) inputLayout.error = null
-                    else inputLayout.error = maskErrorMsg ?: mask?.getStringResIdToNoMatch()?.let { it1 -> context.getString(it1) }
+                    else inputLayout.error = maskErrorMsg ?: mask?.getErrorMsg()?.let { it1 -> context.getString(it1) }
                 }
             } else if (text?.isEmpty() == true) {
                 inputLayout.error = null

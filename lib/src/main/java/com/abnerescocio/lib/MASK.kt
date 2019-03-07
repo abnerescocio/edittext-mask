@@ -9,14 +9,18 @@ import com.abnerescocio.lib.watchers.CNPJTextWatcher
 import com.abnerescocio.lib.watchers.CPFTextWatcher
 import com.abnerescocio.lib.watchers.CreditCardTextWatcher
 
-enum class MASK(private val id: Int?) {
+enum class MASK {
 
-    EMAIL(TextInputEditTextMask.EMAIL) {
+    EMAIL {
+        override fun getId(): Int {
+            return TextInputEditTextMask.EMAIL
+        }
+
         override fun getRegex(): Regex {
             return Regex(Patterns.EMAIL_ADDRESS.pattern())
         }
 
-        override fun getStringResIdToNoMatch(): Int {
+        override fun getErrorMsg(): Int {
             return R.string.no_match_email
         }
 
@@ -33,12 +37,16 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    PHONE(TextInputEditTextMask.PHONE) {
+    PHONE {
+        override fun getId(): Int {
+            return TextInputEditTextMask.PHONE
+        }
+
         override fun getRegex(): Regex {
             return Regex(Patterns.PHONE.pattern())
         }
 
-        override fun getStringResIdToNoMatch(): Int {
+        override fun getErrorMsg(): Int {
             return R.string.no_match_phone
         }
 
@@ -55,12 +63,16 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    CREDIT_CARD(TextInputEditTextMask.CREDIT_CARD) {
+    CREDIT_CARD {
+        override fun getId(): Int {
+            return TextInputEditTextMask.CREDIT_CARD
+        }
+
         override fun getRegex(): Regex {
             return Regex(RGX_CREDIT_CARD)
         }
 
-        override fun getStringResIdToNoMatch(): Int {
+        override fun getErrorMsg(): Int {
             return R.string.no_match_credit_card
         }
 
@@ -78,12 +90,16 @@ enum class MASK(private val id: Int?) {
 
     },
 
-    CPF(TextInputEditTextMask.BRAZILIAN_CPF) {
+    CPF {
+        override fun getId(): Int {
+            return TextInputEditTextMask.BRAZILIAN_CPF
+        }
+
         override fun getRegex(): Regex {
             return Regex(RGX_CPF)
         }
 
-        override fun getStringResIdToNoMatch(): Int {
+        override fun getErrorMsg(): Int {
             return R.string.no_match_brazilian_cpf
         }
 
@@ -117,12 +133,16 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    CNPJ(TextInputEditTextMask.BRAZILIAN_CNPJ) {
+    CNPJ {
+        override fun getId(): Int {
+            return TextInputEditTextMask.BRAZILIAN_CNPJ
+        }
+
         override fun getRegex(): Regex {
             return Regex(RGX_CNPJ)
         }
 
-        override fun getStringResIdToNoMatch(): Int {
+        override fun getErrorMsg(): Int {
             return R.string.no_match_brazilian_cnpj
         }
 
@@ -163,12 +183,16 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    CEP(TextInputEditTextMask.BRAZILIAN_CEP) {
+    CEP {
+        override fun getId(): Int {
+            return TextInputEditTextMask.BRAZILIAN_CEP
+        }
+
         override fun getRegex(): Regex {
             return Regex(RGX_CEP)
         }
 
-        override fun getStringResIdToNoMatch(): Int {
+        override fun getErrorMsg(): Int {
             return R.string.no_match_brazilian_cep
         }
 
@@ -186,12 +210,16 @@ enum class MASK(private val id: Int?) {
 
     },
 
-    IP(TextInputEditTextMask.IP) {
+    IP {
+        override fun getId(): Int {
+            return TextInputEditTextMask.IP
+        }
+
         override fun getRegex(): Regex {
             return Regex(Patterns.IP_ADDRESS.pattern())
         }
 
-        override fun getStringResIdToNoMatch(): Int {
+        override fun getErrorMsg(): Int {
             return R.string.no_match_ip
         }
 
@@ -208,12 +236,16 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    WEB_URL(TextInputEditTextMask.WEB_URL) {
+    WEB_URL {
+        override fun getId(): Int {
+            return TextInputEditTextMask.WEB_URL
+        }
+
         override fun getRegex(): Regex {
             return Regex(Patterns.WEB_URL.pattern())
         }
 
-        override fun getStringResIdToNoMatch(): Int {
+        override fun getErrorMsg(): Int {
             return R.string.no_match_web_url
         }
 
@@ -230,8 +262,9 @@ enum class MASK(private val id: Int?) {
         }
     };
 
+    abstract fun getId(): Int
     abstract fun getRegex(): Regex
-    abstract fun getStringResIdToNoMatch(): Int
+    abstract fun getErrorMsg(): Int
     abstract fun getWatcher(view: TextView): TextWatcher?
     abstract fun getMaxLength(): Int?
     abstract fun isValid(char: CharSequence): Boolean
@@ -243,7 +276,7 @@ enum class MASK(private val id: Int?) {
         const val RGX_CREDIT_CARD = "\\d{4} \\d{4} \\d{4} \\d{4}"
 
         fun valueOf(id: Int?): MASK? {
-            return values().find { it.id == id }
+            return values().find { it.getId() == id }
         }
     }
 }
