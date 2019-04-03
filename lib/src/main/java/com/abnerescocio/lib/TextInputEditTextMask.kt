@@ -15,13 +15,13 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
 
     private var defStyleAttr: Int = 0
     private var typeArray: TypedArray? = null
-    private var maskIdentifer: Int? = null
-    var maskErrorMsg: String? = null
-    var isRequired: Boolean? = false
-    var requiredErrorMsg: String? = null
-    var range: String? = null
-    var rangeErrorMsg: String? = null
-    var isValid: Boolean = false
+    private var maskErrorMsg: String? = null
+    private var isRequired: Boolean = false
+    private var requiredErrorMsg: String? = null
+    private var range: String? = null
+    private var rangeErrorMsg: String? = null
+    @Deprecated("Use fieldValidator() instead")
+    var isValid: Boolean = true
         private set
 
     private var mask: MASK? = null
@@ -36,26 +36,16 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         typeArray = context?.theme?.obtainStyledAttributes(attributeSet,
                 R.styleable.TextInputEditTextMask, 0, 0)
 
-        maskIdentifer = typeArray?.getInt(R.styleable.TextInputEditTextMask_mask, 0)
+        val maskIdentifier = typeArray?.getInt(R.styleable.TextInputEditTextMask_mask, 0)
         maskErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_mask_errorMsg)
-        isRequired = typeArray?.getBoolean(R.styleable.TextInputEditTextMask_required, false)
+        isRequired = typeArray?.getBoolean(R.styleable.TextInputEditTextMask_required, false) ?: false
         requiredErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_required_errorMsg)
         range = typeArray?.getString(R.styleable.TextInputEditTextMask_range)
         rangeErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_range_errorMsg)
 
-        createMask()
+        setMask(maskIdentifier)
 
         typeArray?.recycle()
-    }
-
-    private fun createMask() {
-        removeTextChangedListener(currentWatcher)
-        mask = MASK.valueOf(maskIdentifer)
-        mask?.getMaxLength()?.let { filters = arrayOf(InputFilter.LengthFilter(it)) }
-        mask?.getWatcher(this)?.let {
-            currentWatcher = it
-            addTextChangedListener(currentWatcher)
-        }
     }
 
     override fun onTextChanged(text: CharSequence, start: Int, lengthBefore: Int, lengthAfter: Int) {
@@ -67,14 +57,13 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         return super.requestFocus(direction, previouslyFocusedRect)
     }
 
-    private fun fieldValidator() {
+    fun fieldValidator() : Boolean {
         val inputLayout = parent?.parent
         if (inputLayout is TextInputLayout) {
-            if (isRequired == true && text?.isEmpty() == true) {
+            if (isRequired && text.isNullOrEmpty()) {
                 inputLayout.error = requiredErrorMsg ?: context.getString(R.string.required_field)
-                isValid = false
-                return
-            } else if (isRequired == true && text?.isNotEmpty() == true) {
+                return false
+            } else if (isRequired && text.isNotEmpty()) {
                 inputLayout.error = null
             }
 
@@ -83,33 +72,33 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
                     if (Regex(pattern).matches(text)) inputLayout.error = null
                     else {
                         inputLayout.error = rangeErrorMsg ?: context.getString(R.string.invalid_range)
-                        return
+                        return false
                     }
                 }
             } catch (e: PatternSyntaxException) {
                 throw PatternSyntaxException("Range is not a valid regex. Valid ex.: [0-99], [2-6], [a-Z]", range, e.index)
             }
 
-            if (mask != null && text?.isNotEmpty() == true) {
-                mask?.getRegex()?.matches(text ?: "")?.
-                        and(mask?.isValid(text ?: "") ?: false)?.let {
+            mask?.let { m ->
+                m.getRegex().matches(text).and(m.isValid(text)).let {
                     if (it) inputLayout.error = null
-                    else inputLayout.error = maskErrorMsg ?: mask?.getStringResIdToNoMatch()?.let { it1 -> context.getString(it1) }
+                    else inputLayout.error = maskErrorMsg ?: context.getString(m.getMessage())
                 }
-            } else if (text?.isEmpty() == true) {
-                inputLayout.error = null
             }
 
-            isValid = inputLayout.error == null
+            return inputLayout.error == null
         }
+        return false
     }
 
-    @Target(AnnotationTarget.TYPE)
-    annotation class MaskIdentifier(vararg val value: Int)
-
-    fun setMask(identifier: @MaskIdentifier(EMAIL, PHONE, IP, WEB_URL, BRAZILIAN_CPF, BRAZILIAN_CNPJ) Int) {
-        maskIdentifer = identifier
-        createMask()
+    fun setMask(identifier: Int?) {
+        removeTextChangedListener(currentWatcher)
+        mask = MASK.valueOf(identifier)
+        mask?.getMaxLength()?.let { filters = arrayOf(InputFilter.LengthFilter(it)) }
+        mask?.getWatcher(this)?.let {
+            currentWatcher = it
+            addTextChangedListener(currentWatcher)
+        }
     }
 
     companion object {

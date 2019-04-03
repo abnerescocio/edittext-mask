@@ -8,14 +8,16 @@ import com.abnerescocio.lib.watchers.CEPTextWatcher
 import com.abnerescocio.lib.watchers.CNPJTextWatcher
 import com.abnerescocio.lib.watchers.CPFTextWatcher
 
-enum class MASK(private val id: Int?) {
+enum class MASK {
 
-    EMAIL(TextInputEditTextMask.EMAIL) {
+    EMAIL {
+        override fun getId() = TextInputEditTextMask.EMAIL
+
         override fun getRegex(): Regex {
             return Regex(Patterns.EMAIL_ADDRESS.pattern())
         }
 
-        override fun getStringResIdToNoMatch(): Int {
+        override fun getMessage(): Int {
             return R.string.no_match_email
         }
 
@@ -32,44 +34,32 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    PHONE(TextInputEditTextMask.PHONE) {
-        override fun getRegex(): Regex {
-            return Regex(Patterns.PHONE.pattern())
-        }
+    PHONE {
 
-        override fun getStringResIdToNoMatch(): Int {
-            return R.string.no_match_phone
-        }
+        override fun getId() = TextInputEditTextMask.PHONE
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return PhoneNumberFormattingTextWatcher()
-        }
+        override fun getRegex() = Regex(Patterns.PHONE.pattern())
 
-        override fun getMaxLength(): Int? {
-            return null
-        }
+        override fun getMessage() = R.string.no_match_phone
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun getWatcher(view: TextView) = PhoneNumberFormattingTextWatcher()
+
+        override fun getMaxLength(): Int? = null
+
+        override fun isValid(char: CharSequence) = true
     },
 
-    CPF(TextInputEditTextMask.BRAZILIAN_CPF) {
-        override fun getRegex(): Regex {
-            return Regex(RGX_CPF)
-        }
+    CPF {
 
-        override fun getStringResIdToNoMatch(): Int {
-            return R.string.no_match_brazilian_cpf
-        }
+        override fun getId() = TextInputEditTextMask.BRAZILIAN_CPF
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return CPFTextWatcher(view)
-        }
+        override fun getRegex() = Regex(RGX_CPF)
 
-        override fun getMaxLength(): Int? {
-            return 11 + 3
-        }
+        override fun getMessage() = R.string.no_match_brazilian_cpf
+
+        override fun getWatcher(view: TextView) = CPFTextWatcher(view)
+
+        override fun getMaxLength() = 11 + 3
 
         override fun isValid(char: CharSequence): Boolean {
             val cpf = char.replace(Regex("\\D"), "")
@@ -93,22 +83,17 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    CNPJ(TextInputEditTextMask.BRAZILIAN_CNPJ) {
-        override fun getRegex(): Regex {
-            return Regex(RGX_CNPJ)
-        }
+    CNPJ {
 
-        override fun getStringResIdToNoMatch(): Int {
-            return R.string.no_match_brazilian_cnpj
-        }
+        override fun getId() = TextInputEditTextMask.BRAZILIAN_CNPJ
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return CNPJTextWatcher(view)
-        }
+        override fun getRegex() = Regex(RGX_CNPJ)
 
-        override fun getMaxLength(): Int? {
-            return 14 + 4
-        }
+        override fun getMessage() = R.string.no_match_brazilian_cnpj
+
+        override fun getWatcher(view: TextView) = CNPJTextWatcher(view)
+
+        override fun getMaxLength() = 14 + 4
 
         override fun isValid(char: CharSequence): Boolean {
             val cnpj = char.replace(Regex("\\D"), "")
@@ -139,75 +124,55 @@ enum class MASK(private val id: Int?) {
         }
     },
 
-    CEP(TextInputEditTextMask.BRAZILIAN_CEP) {
-        override fun getRegex(): Regex {
-            return Regex(RGX_CEP)
-        }
+    CEP {
 
-        override fun getStringResIdToNoMatch(): Int {
-            return R.string.no_match_brazilian_cep
-        }
+        override fun getId() = TextInputEditTextMask.BRAZILIAN_CEP
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return CEPTextWatcher(view)
-        }
+        override fun getRegex() = Regex(RGX_CEP)
 
-        override fun getMaxLength(): Int? {
-            return 9
-        }
+        override fun getMessage() = R.string.no_match_brazilian_cep
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun getWatcher(view: TextView) = CEPTextWatcher(view)
+
+        override fun getMaxLength() = 9
+
+        override fun isValid(char: CharSequence) = true
 
     },
 
-    IP(TextInputEditTextMask.IP) {
-        override fun getRegex(): Regex {
-            return Regex(Patterns.IP_ADDRESS.pattern())
-        }
+    IP {
 
-        override fun getStringResIdToNoMatch(): Int {
-            return R.string.no_match_ip
-        }
+        override fun getId() = TextInputEditTextMask.IP
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return null
-        }
+        override fun getRegex() = Regex(Patterns.IP_ADDRESS.pattern())
 
-        override fun getMaxLength(): Int? {
-            return null
-        }
+        override fun getMessage() = R.string.no_match_ip
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun getWatcher(view: TextView): TextWatcher? = null
+
+        override fun getMaxLength(): Int? = null
+
+        override fun isValid(char: CharSequence) = true
     },
 
-    WEB_URL(TextInputEditTextMask.WEB_URL) {
-        override fun getRegex(): Regex {
-            return Regex(Patterns.WEB_URL.pattern())
-        }
+    WEB_URL {
 
-        override fun getStringResIdToNoMatch(): Int {
-            return R.string.no_match_web_url
-        }
+        override fun getId() = TextInputEditTextMask.WEB_URL
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return null
-        }
+        override fun getRegex() = Regex(Patterns.WEB_URL.pattern())
 
-        override fun getMaxLength(): Int? {
-            return null
-        }
+        override fun getMessage() = R.string.no_match_web_url
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun getWatcher(view: TextView): TextWatcher? = null
+
+        override fun getMaxLength(): Int? = null
+
+        override fun isValid(char: CharSequence) = true
     };
 
+    abstract fun getId(): Int
     abstract fun getRegex(): Regex
-    abstract fun getStringResIdToNoMatch(): Int
+    abstract fun getMessage(): Int
     abstract fun getWatcher(view: TextView): TextWatcher?
     abstract fun getMaxLength(): Int?
     abstract fun isValid(char: CharSequence): Boolean
@@ -217,8 +182,7 @@ enum class MASK(private val id: Int?) {
         const val RGX_CNPJ = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}"
         const val RGX_CEP = "\\d{5}-\\d{3}"
 
-        fun valueOf(id: Int?): MASK? {
-            return values().find { it.id == id }
-        }
+        fun valueOf(id: Int?) = values().find { it.getId() == id }
+                ?: throw ClassCastException("The id need be a valid MASK")
     }
 }
