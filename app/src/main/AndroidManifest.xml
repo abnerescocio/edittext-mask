@@ -11,9 +11,6 @@
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
         <activity android:name="com.abnerescocio.edittextmask.MainActivity">
-
-        </activity>
-        <activity android:name="com.abnerescocio.edittextmask.MainJavaActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

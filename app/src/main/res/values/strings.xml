@@ -2,4 +2,8 @@
     <string name="app_name">edittext-mask</string>
 
     <string name="no_match_email">E-mail inválido</string>
+	<string name="is_valid">Is valid?</string>
+	<string name="is_required">Is required?</string>
+	<string name="required_error_message">Required error message</string>
+	<string name="set">Set</string>
 </resources>
