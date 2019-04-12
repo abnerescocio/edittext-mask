@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputLayout
 import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.AttributeSet
+import com.abnerescocio.lib.watchers.CreditCardTextWatcher
 import java.util.regex.PatternSyntaxException
 
 class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
@@ -91,6 +92,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     }
 
     fun setMask(identifier: Int?) {
+        if (currentWatcher is CreditCardTextWatcher) setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
         removeTextChangedListener(currentWatcher)
         mask = MASK.valueOf(identifier)
         mask?.getMaxLength().let {
