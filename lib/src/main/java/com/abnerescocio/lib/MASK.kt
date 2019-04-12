@@ -8,6 +8,7 @@ import android.widget.TextView
 import com.abnerescocio.lib.watchers.CEPTextWatcher
 import com.abnerescocio.lib.watchers.CNPJTextWatcher
 import com.abnerescocio.lib.watchers.CPFTextWatcher
+import java.lang.Exception
 
 enum class MASK {
 
@@ -58,8 +59,12 @@ enum class MASK {
         override fun getMaxLength() = 11 + 3
 
         override fun isValid(text: CharSequence): Boolean {
+            if (!getRegex().matches(text)) return false
+            
             val cpf = text.replace(Regex("\\D"), "")
             if (cpf.length < 11) return false
+            
+            if (Regex("0{11}|1{11}|2{11}|3{11}|4{11}|5{11}|6{11}|7{11}|8{11}|9{11}").matches(cpf)) return false
 
             var digit1 = 0
             for (i in 10 downTo 2) {
@@ -75,7 +80,7 @@ enum class MASK {
             digit2 += digit1 * 2
             digit2 = (digit2 * 10) % 11
 
-            return cpf[9].toString().toInt() == digit1 && cpf[10].toString().toInt() == digit2 && getRegex().matches(text)
+            return cpf[9].toString().toInt() == digit1 && cpf[10].toString().toInt() == digit2
         }
 
         override fun getInputType() = InputType.TYPE_CLASS_PHONE
@@ -94,8 +99,12 @@ enum class MASK {
         override fun getMaxLength() = 14 + 4
 
         override fun isValid(text: CharSequence): Boolean {
+            if (!getRegex().matches(text)) return false
+            
             val cnpj = text.replace(Regex("\\D"), "")
             if (cnpj.length < 14) return false
+    
+            if (Regex("0{14}|1{14}|2{14}|3{14}|4{14}|5{14}|6{14}|7{14}|8{14}|9{14}").matches(cnpj)) return false
 
             var digit1 = 0
             for (i in 5 downTo 2) {
@@ -118,7 +127,7 @@ enum class MASK {
             digit2 %= 11
             digit2 = if (digit2 < 2) 0 else 11 - digit2
 
-            return cnpj[12].toString().toInt() == digit1 && cnpj[13].toString().toInt() == digit2 && getRegex().matches(text)
+            return cnpj[12].toString().toInt() == digit1 && cnpj[13].toString().toInt() == digit2
         }
 
         override fun getInputType() = InputType.TYPE_CLASS_PHONE
@@ -185,9 +194,9 @@ enum class MASK {
     abstract fun getInputType() : Int
 
     companion object {
-        const val RGX_CPF = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"
-        const val RGX_CNPJ = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}"
-        const val RGX_CEP = "\\d{5}-\\d{3}"
+        const val RGX_CPF = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}|\\d{11}"
+        const val RGX_CNPJ = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}|\\d{14}"
+        const val RGX_CEP = "\\d{5}-\\d{3}|\\d{8}"
 
         fun valueOf(id: Int?) = values().find { it.getId() == id }
                 ?: throw ClassCastException("The id need be a valid MASK")
