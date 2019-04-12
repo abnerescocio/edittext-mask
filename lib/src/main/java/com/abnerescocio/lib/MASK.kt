@@ -15,25 +15,15 @@ enum class MASK {
 
         override fun getId() = TextInputEditTextMask.EMAIL
 
-        override fun getRegex(): Regex {
-            return Regex(Patterns.EMAIL_ADDRESS.pattern())
-        }
+        override fun getRegex() = Regex(Patterns.EMAIL_ADDRESS.pattern())
 
-        override fun getMessage(): Int {
-            return R.string.no_match_email
-        }
+        override fun getMessage() = R.string.no_match_email
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return null
-        }
+        override fun getWatcher(view: TextView): TextWatcher? = null
 
-        override fun getMaxLength(): Int? {
-            return null
-        }
+        override fun getMaxLength(): Int? = null
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
 
         override fun getInputType() = InputType.TYPE_CLASS_TEXT
     },
@@ -50,7 +40,7 @@ enum class MASK {
 
         override fun getMaxLength(): Int? = null
 
-        override fun isValid(char: CharSequence) = true
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
 
         override fun getInputType() = InputType.TYPE_CLASS_PHONE
     },
@@ -67,8 +57,8 @@ enum class MASK {
 
         override fun getMaxLength() = 11 + 3
 
-        override fun isValid(char: CharSequence): Boolean {
-            val cpf = char.replace(Regex("\\D"), "")
+        override fun isValid(text: CharSequence): Boolean {
+            val cpf = text.replace(Regex("\\D"), "")
             if (cpf.length < 11) return false
 
             var digit1 = 0
@@ -85,7 +75,7 @@ enum class MASK {
             digit2 += digit1 * 2
             digit2 = (digit2 * 10) % 11
 
-            return cpf[9].toString().toInt() == digit1 && cpf[10].toString().toInt() == digit2
+            return cpf[9].toString().toInt() == digit1 && cpf[10].toString().toInt() == digit2 && getRegex().matches(text)
         }
 
         override fun getInputType() = InputType.TYPE_CLASS_PHONE
@@ -103,8 +93,8 @@ enum class MASK {
 
         override fun getMaxLength() = 14 + 4
 
-        override fun isValid(char: CharSequence): Boolean {
-            val cnpj = char.replace(Regex("\\D"), "")
+        override fun isValid(text: CharSequence): Boolean {
+            val cnpj = text.replace(Regex("\\D"), "")
             if (cnpj.length < 14) return false
 
             var digit1 = 0
@@ -128,7 +118,7 @@ enum class MASK {
             digit2 %= 11
             digit2 = if (digit2 < 2) 0 else 11 - digit2
 
-            return cnpj[12].toString().toInt() == digit1 && cnpj[13].toString().toInt() == digit2
+            return cnpj[12].toString().toInt() == digit1 && cnpj[13].toString().toInt() == digit2 && getRegex().matches(text)
         }
 
         override fun getInputType() = InputType.TYPE_CLASS_PHONE
@@ -146,7 +136,7 @@ enum class MASK {
 
         override fun getMaxLength() = 9
 
-        override fun isValid(char: CharSequence) = true
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
 
         override fun getInputType() = InputType.TYPE_CLASS_PHONE
 
@@ -164,7 +154,7 @@ enum class MASK {
 
         override fun getMaxLength(): Int? = null
 
-        override fun isValid(char: CharSequence) = true
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
 
         override fun getInputType() = InputType.TYPE_NUMBER_FLAG_DECIMAL
     },
@@ -181,7 +171,7 @@ enum class MASK {
 
         override fun getMaxLength(): Int? = null
 
-        override fun isValid(char: CharSequence) = true
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
 
         override fun getInputType() = InputType.TYPE_CLASS_TEXT
     };
@@ -191,7 +181,7 @@ enum class MASK {
     abstract fun getMessage(): Int
     abstract fun getWatcher(view: TextView): TextWatcher?
     abstract fun getMaxLength(): Int?
-    abstract fun isValid(char: CharSequence): Boolean
+    abstract fun isValid(text: CharSequence): Boolean
     abstract fun getInputType() : Int
 
     companion object {

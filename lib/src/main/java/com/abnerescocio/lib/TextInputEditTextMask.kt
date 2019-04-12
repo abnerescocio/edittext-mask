@@ -20,6 +20,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     var requiredErrorMsg: String? = null
     var range: String? = null
     var rangeErrorMsg: String? = null
+    @Suppress("unused")
     @Deprecated("Use fieldValidator() instead")
     var isValid: Boolean = true
         private set
@@ -80,10 +81,8 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
             }
 
             mask?.let { m ->
-                m.getRegex().matches(text).and(m.isValid(text)).let {
-                    if (it) inputLayout.error = null
-                    else inputLayout.error = maskErrorMsg ?: context.getString(m.getMessage())
-                }
+                if (m.isValid(text)) inputLayout.error = null
+                else inputLayout.error = maskErrorMsg ?: context.getString(m.getMessage())
             }
 
             return inputLayout.error == null
@@ -95,9 +94,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         removeTextChangedListener(currentWatcher)
         mask = MASK.valueOf(identifier)
         mask?.getMaxLength().let {
-            if (it != null) {
-                filters = arrayOf(InputFilter.LengthFilter(it))
-            } else filters = arrayOf()
+            filters = if (it != null) arrayOf(InputFilter.LengthFilter(it)) else arrayOf()
         }
         mask?.getInputType()?.let { inputType = it }
         mask?.getWatcher(this)?.let {
