@@ -1,6 +1,7 @@
 package com.abnerescocio.lib
 
 import android.telephony.PhoneNumberFormattingTextWatcher
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.TextView
@@ -11,6 +12,7 @@ import com.abnerescocio.lib.watchers.CPFTextWatcher
 enum class MASK {
 
     EMAIL {
+
         override fun getId() = TextInputEditTextMask.EMAIL
 
         override fun getRegex(): Regex {
@@ -32,6 +34,8 @@ enum class MASK {
         override fun isValid(char: CharSequence): Boolean {
             return true
         }
+
+        override fun getInputType() = InputType.TYPE_CLASS_TEXT
     },
 
     PHONE {
@@ -47,6 +51,8 @@ enum class MASK {
         override fun getMaxLength(): Int? = null
 
         override fun isValid(char: CharSequence) = true
+
+        override fun getInputType() = InputType.TYPE_CLASS_PHONE
     },
 
     CPF {
@@ -81,6 +87,8 @@ enum class MASK {
 
             return cpf[9].toString().toInt() == digit1 && cpf[10].toString().toInt() == digit2
         }
+
+        override fun getInputType() = InputType.TYPE_CLASS_PHONE
     },
 
     CNPJ {
@@ -122,6 +130,8 @@ enum class MASK {
 
             return cnpj[12].toString().toInt() == digit1 && cnpj[13].toString().toInt() == digit2
         }
+
+        override fun getInputType() = InputType.TYPE_CLASS_PHONE
     },
 
     CEP {
@@ -138,6 +148,8 @@ enum class MASK {
 
         override fun isValid(char: CharSequence) = true
 
+        override fun getInputType() = InputType.TYPE_CLASS_PHONE
+
     },
 
     IP {
@@ -153,6 +165,8 @@ enum class MASK {
         override fun getMaxLength(): Int? = null
 
         override fun isValid(char: CharSequence) = true
+
+        override fun getInputType() = InputType.TYPE_NUMBER_FLAG_DECIMAL
     },
 
     WEB_URL {
@@ -168,6 +182,8 @@ enum class MASK {
         override fun getMaxLength(): Int? = null
 
         override fun isValid(char: CharSequence) = true
+
+        override fun getInputType() = InputType.TYPE_CLASS_TEXT
     };
 
     abstract fun getId(): Int
@@ -176,6 +192,7 @@ enum class MASK {
     abstract fun getWatcher(view: TextView): TextWatcher?
     abstract fun getMaxLength(): Int?
     abstract fun isValid(char: CharSequence): Boolean
+    abstract fun getInputType() : Int
 
     companion object {
         const val RGX_CPF = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"
