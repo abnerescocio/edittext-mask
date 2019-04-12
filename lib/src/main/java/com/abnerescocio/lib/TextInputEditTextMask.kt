@@ -15,11 +15,11 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
 
     private var defStyleAttr: Int = 0
     private var typeArray: TypedArray? = null
-    private var maskErrorMsg: String? = null
-    private var isRequired: Boolean = false
-    private var requiredErrorMsg: String? = null
-    private var range: String? = null
-    private var rangeErrorMsg: String? = null
+    var maskErrorMsg: String? = null
+    var isRequired: Boolean = false
+    var requiredErrorMsg: String? = null
+    var range: String? = null
+    var rangeErrorMsg: String? = null
     @Deprecated("Use fieldValidator() instead")
     var isValid: Boolean = true
         private set
@@ -94,7 +94,12 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     fun setMask(identifier: Int?) {
         removeTextChangedListener(currentWatcher)
         mask = MASK.valueOf(identifier)
-        mask?.getMaxLength()?.let { filters = arrayOf(InputFilter.LengthFilter(it)) }
+        mask?.getMaxLength().let {
+            if (it != null) {
+                filters = arrayOf(InputFilter.LengthFilter(it))
+            } else filters = arrayOf()
+        }
+        mask?.getInputType()?.let { inputType = it }
         mask?.getWatcher(this)?.let {
             currentWatcher = it
             addTextChangedListener(currentWatcher)
