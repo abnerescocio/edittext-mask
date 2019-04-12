@@ -1,6 +1,7 @@
 package com.abnerescocio.lib
 
 import android.telephony.PhoneNumberFormattingTextWatcher
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.TextView
@@ -8,61 +9,49 @@ import com.abnerescocio.lib.watchers.CEPTextWatcher
 import com.abnerescocio.lib.watchers.CNPJTextWatcher
 import com.abnerescocio.lib.watchers.CPFTextWatcher
 import com.abnerescocio.lib.watchers.CreditCardTextWatcher
+import java.lang.Exception
 
 enum class MASK {
 
     EMAIL {
-        override fun getId(): Int {
-            return TextInputEditTextMask.EMAIL
-        }
 
-        override fun getRegex(): Regex {
-            return Regex(Patterns.EMAIL_ADDRESS.pattern())
-        }
+        override fun getId() = TextInputEditTextMask.EMAIL
 
-        override fun getErrorMsg(): Int {
-            return R.string.no_match_email
-        }
+        override fun getRegex() = Regex(Patterns.EMAIL_ADDRESS.pattern())
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return null
-        }
+        override fun getMessage() = R.string.no_match_email
 
-        override fun getMaxLength(): Int? {
-            return null
-        }
+        override fun getWatcher(view: TextView): TextWatcher? = null
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun getMaxLength(): Int? = null
+
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
+
+        override fun getInputType() = InputType.TYPE_CLASS_TEXT
     },
 
     PHONE {
-        override fun getId(): Int {
-            return TextInputEditTextMask.PHONE
-        }
 
-        override fun getRegex(): Regex {
-            return Regex(Patterns.PHONE.pattern())
-        }
+        override fun getId() = TextInputEditTextMask.PHONE
 
-        override fun getErrorMsg(): Int {
-            return R.string.no_match_phone
-        }
+        override fun getRegex() = Regex(Patterns.PHONE.pattern())
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return PhoneNumberFormattingTextWatcher()
-        }
+        override fun getMessage() = R.string.no_match_phone
 
-        override fun getMaxLength(): Int? {
-            return null
-        }
+        override fun getWatcher(view: TextView) = PhoneNumberFormattingTextWatcher()
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun getMaxLength(): Int? = null
+
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
+
+        override fun getInputType() = InputType.TYPE_CLASS_PHONE
     },
 
+    CPF {
+
+        override fun getId() = TextInputEditTextMask.BRAZILIAN_CPF
+
+        override fun getRegex() = Regex(RGX_CPF)
     CREDIT_CARD {
         override fun getId(): Int {
             return TextInputEditTextMask.CREDIT_CARD
@@ -99,21 +88,19 @@ enum class MASK {
             return Regex(RGX_CPF)
         }
 
-        override fun getErrorMsg(): Int {
-            return R.string.no_match_brazilian_cpf
-        }
+        override fun getMessage() = R.string.no_match_brazilian_cpf
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return CPFTextWatcher(view)
-        }
+        override fun getWatcher(view: TextView) = CPFTextWatcher(view)
 
-        override fun getMaxLength(): Int? {
-            return 11 + 3
-        }
+        override fun getMaxLength() = 11 + 3
 
-        override fun isValid(char: CharSequence): Boolean {
-            val cpf = char.replace(Regex("\\D"), "")
+        override fun isValid(text: CharSequence): Boolean {
+            if (!getRegex().matches(text)) return false
+            
+            val cpf = text.replace(Regex("\\D"), "")
             if (cpf.length < 11) return false
+            
+            if (Regex("0{11}|1{11}|2{11}|3{11}|4{11}|5{11}|6{11}|7{11}|8{11}|9{11}").matches(cpf)) return false
 
             var digit1 = 0
             for (i in 10 downTo 2) {
@@ -131,32 +118,29 @@ enum class MASK {
 
             return cpf[9].toString().toInt() == digit1 && cpf[10].toString().toInt() == digit2
         }
+
+        override fun getInputType() = InputType.TYPE_CLASS_PHONE
     },
 
     CNPJ {
-        override fun getId(): Int {
-            return TextInputEditTextMask.BRAZILIAN_CNPJ
-        }
 
-        override fun getRegex(): Regex {
-            return Regex(RGX_CNPJ)
-        }
+        override fun getId() = TextInputEditTextMask.BRAZILIAN_CNPJ
 
-        override fun getErrorMsg(): Int {
-            return R.string.no_match_brazilian_cnpj
-        }
+        override fun getRegex() = Regex(RGX_CNPJ)
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return CNPJTextWatcher(view)
-        }
+        override fun getMessage() = R.string.no_match_brazilian_cnpj
 
-        override fun getMaxLength(): Int? {
-            return 14 + 4
-        }
+        override fun getWatcher(view: TextView) = CNPJTextWatcher(view)
 
-        override fun isValid(char: CharSequence): Boolean {
-            val cnpj = char.replace(Regex("\\D"), "")
+        override fun getMaxLength() = 14 + 4
+
+        override fun isValid(text: CharSequence): Boolean {
+            if (!getRegex().matches(text)) return false
+            
+            val cnpj = text.replace(Regex("\\D"), "")
             if (cnpj.length < 14) return false
+    
+            if (Regex("0{14}|1{14}|2{14}|3{14}|4{14}|5{14}|6{14}|7{14}|8{14}|9{14}").matches(cnpj)) return false
 
             var digit1 = 0
             for (i in 5 downTo 2) {
@@ -181,102 +165,75 @@ enum class MASK {
 
             return cnpj[12].toString().toInt() == digit1 && cnpj[13].toString().toInt() == digit2
         }
+
+        override fun getInputType() = InputType.TYPE_CLASS_PHONE
     },
 
     CEP {
-        override fun getId(): Int {
-            return TextInputEditTextMask.BRAZILIAN_CEP
-        }
 
-        override fun getRegex(): Regex {
-            return Regex(RGX_CEP)
-        }
+        override fun getId() = TextInputEditTextMask.BRAZILIAN_CEP
 
-        override fun getErrorMsg(): Int {
-            return R.string.no_match_brazilian_cep
-        }
+        override fun getRegex() = Regex(RGX_CEP)
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return CEPTextWatcher(view)
-        }
+        override fun getMessage() = R.string.no_match_brazilian_cep
 
-        override fun getMaxLength(): Int? {
-            return 9
-        }
+        override fun getWatcher(view: TextView) = CEPTextWatcher(view)
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun getMaxLength() = 9
+
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
+
+        override fun getInputType() = InputType.TYPE_CLASS_PHONE
 
     },
 
     IP {
-        override fun getId(): Int {
-            return TextInputEditTextMask.IP
-        }
 
-        override fun getRegex(): Regex {
-            return Regex(Patterns.IP_ADDRESS.pattern())
-        }
+        override fun getId() = TextInputEditTextMask.IP
 
-        override fun getErrorMsg(): Int {
-            return R.string.no_match_ip
-        }
+        override fun getRegex() = Regex(Patterns.IP_ADDRESS.pattern())
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return null
-        }
+        override fun getMessage() = R.string.no_match_ip
 
-        override fun getMaxLength(): Int? {
-            return null
-        }
+        override fun getWatcher(view: TextView): TextWatcher? = null
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun getMaxLength(): Int? = null
+
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
+
+        override fun getInputType() = InputType.TYPE_NUMBER_FLAG_DECIMAL
     },
 
     WEB_URL {
-        override fun getId(): Int {
-            return TextInputEditTextMask.WEB_URL
-        }
 
-        override fun getRegex(): Regex {
-            return Regex(Patterns.WEB_URL.pattern())
-        }
+        override fun getId() = TextInputEditTextMask.WEB_URL
 
-        override fun getErrorMsg(): Int {
-            return R.string.no_match_web_url
-        }
+        override fun getRegex() = Regex(Patterns.WEB_URL.pattern())
 
-        override fun getWatcher(view: TextView): TextWatcher? {
-            return null
-        }
+        override fun getMessage() = R.string.no_match_web_url
 
-        override fun getMaxLength(): Int? {
-            return null
-        }
+        override fun getWatcher(view: TextView): TextWatcher? = null
 
-        override fun isValid(char: CharSequence): Boolean {
-            return true
-        }
+        override fun getMaxLength(): Int? = null
+
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
+
+        override fun getInputType() = InputType.TYPE_CLASS_TEXT
     };
 
-    abstract fun getId(): Int
     abstract fun getRegex(): Regex
-    abstract fun getErrorMsg(): Int
+    abstract fun getMessage(): Int
     abstract fun getWatcher(view: TextView): TextWatcher?
     abstract fun getMaxLength(): Int?
-    abstract fun isValid(char: CharSequence): Boolean
+    abstract fun isValid(text: CharSequence): Boolean
+    abstract fun getInputType() : Int
 
     companion object {
-        const val RGX_CPF = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}"
-        const val RGX_CNPJ = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}"
-        const val RGX_CEP = "\\d{5}-\\d{3}"
-        const val RGX_CREDIT_CARD = "\\d{4} \\d{4} \\d{4} \\d{4}"
+        const val RGX_CPF = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}|\\d{11}"
+        const val RGX_CNPJ = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}|\\d{14}"
+        const val RGX_CEP = "\\d{5}-\\d{3}|\\d{8}"
 
-        fun valueOf(id: Int?): MASK? {
-            return values().find { it.getId() == id }
-        }
+        fun valueOf(id: Int?) = values().find { it.getId() == id }
+                ?: throw ClassCastException("The id need be a valid MASK")
     }
 }
