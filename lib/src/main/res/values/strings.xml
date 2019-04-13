@@ -9,7 +9,7 @@
     <string name="no_match_brazilian_cpf">Invalid cpf</string>
     <string name="no_match_brazilian_cnpj">Invalid cnpj</string>
     <string name="required_field">Required field</string>
-    <string name="invalid_range">Invalid range</string>
+    <string name="invalid_regex">Invalid regex</string>
     <string name="no_match_brazilian_cep">CEP inválido</string>
     <string name="no_match_credit_card">Invalid credit card</string>
 

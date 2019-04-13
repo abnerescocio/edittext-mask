@@ -21,9 +21,13 @@
 
         <attr name="required_errorMsg" format="string"/>
 
-        <attr name="range" format="string" />
+        <attr name="range" format="string"/>
 
         <attr name="range_errorMsg" format="string"/>
+
+        <attr name="regex_auxiliary" format="string" />
+
+        <attr name="regex_auxiliary_errorMsg" format="string"/>
 
     </declare-styleable>
 
