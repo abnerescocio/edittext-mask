@@ -21,10 +21,14 @@ class CreditCardTextWatcher(private val view: TextView) : AppTextWatcher(view) {
         super.onTextChanged(s, start, before, count)
         val strCardNumber = s?.toString()?.replace(" ", "") ?: return
         when (strCardNumber.length) {
+            0 -> setDrawableByIndexOfPool(0)
             INDEX1 -> {
                 when (strCardNumber.toInt()) {
                     4 -> {
                         poolOfIcons[INDEX1] = R.drawable.ic_visa
+                    }
+                    6 -> {
+                       poolOfIcons[INDEX1] = R.drawable.ic_discover
                     }
                     else -> poolOfIcons[INDEX1] = null
                 }
@@ -35,7 +39,7 @@ class CreditCardTextWatcher(private val view: TextView) : AppTextWatcher(view) {
                     38, 60 -> {
                         poolOfIcons[INDEX2] = R.drawable.ic_hipercard
                     }
-                    in 23..26, in 51..55 -> {
+                    in 22..27, in 51..55 -> {
                         poolOfIcons[INDEX2] = R.drawable.ic_mastercard
                     }
                     else -> poolOfIcons[INDEX2] = null
@@ -44,7 +48,7 @@ class CreditCardTextWatcher(private val view: TextView) : AppTextWatcher(view) {
             }
             INDEX3 -> {
                 when (strCardNumber.toInt()) {
-                    in 223..229, 270, 271 -> {
+                    in 222..272, in 510..559 -> {
                         poolOfIcons[INDEX3] = R.drawable.ic_mastercard
                     }
                     else -> poolOfIcons[INDEX3] = null
@@ -53,14 +57,34 @@ class CreditCardTextWatcher(private val view: TextView) : AppTextWatcher(view) {
             }
             INDEX4 -> {
                 when (strCardNumber.toInt()) {
-                    in 2221..2229, 2720 -> {
+                    in 2221..2720, in 5100..5599 -> {
                         poolOfIcons[INDEX4] = R.drawable.ic_mastercard
                     }
                     else -> poolOfIcons[INDEX4] = null
                 }
                 setDrawableByIndexOfPool(INDEX4)
             }
-            else -> setDrawableByIndexOfPool(0)
+            INDEX5 -> {
+                when (strCardNumber.toInt()) {
+                    in 22210..27209, in 51000..55999 -> {
+                        poolOfIcons[INDEX5] = R.drawable.ic_mastercard
+                    }
+                    else -> poolOfIcons[INDEX5] = null
+                }
+                setDrawableByIndexOfPool(INDEX5)
+            }
+            INDEX6 -> {
+                when (strCardNumber.toInt()) {
+                    in 222100..272099, in 510000..559999 -> {
+                        poolOfIcons[INDEX6] = R.drawable.ic_mastercard
+                    }
+                    in 601100..601109, in 601120..601149, 601174, in 601177..601179, in 601186..601199, in 644000..659999 -> {
+                        poolOfIcons[INDEX6] = R.drawable.ic_discover
+                    }
+                    else -> poolOfIcons[INDEX6] = null
+                }
+                setDrawableByIndexOfPool(INDEX6)
+            }
         }
     }
 
@@ -90,5 +114,7 @@ class CreditCardTextWatcher(private val view: TextView) : AppTextWatcher(view) {
         private const val INDEX2 = 2
         private const val INDEX3 = 3
         private const val INDEX4 = 4
+        private const val INDEX5 = 5
+        private const val INDEX6 = 6
     }
 }
