@@ -62,7 +62,7 @@ dependencies {
 ![screenshot2](https://github.com/abnerescocio/edittext-mask/blob/alpha/screenshot_2.png)
 
 ### Use of regex auxiliary
-![screenshot3](https://github.com/abnerescocio/edittext-mask/blob/alpha/screenshot_3.mp4)
+![screenshot3](https://github.com/abnerescocio/edittext-mask/blob/alpha/screenshot_3.png)
 
 **Step 2.** The use of attrs
 
