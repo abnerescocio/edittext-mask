@@ -79,7 +79,7 @@ web url | www.google.com
 
 Regex auxliary | Example
 ------------ | -------------
-Can't use test | ^(?!.*test).*$
+Can't use test | ^(?!.\*test).\*$
 Need input 5 characters | \\d{5,}
 Use just letters | [a-zA-Z]
 Use just numbers | [0-9]
