@@ -19,8 +19,8 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     var maskErrorMsg: String? = null
     var isRequired: Boolean = false
     var requiredErrorMsg: String? = null
-    var range: String? = null
-    var rangeErrorMsg: String? = null
+    var regexAuxiliary: String? = null
+    var regexAuxiliaryErrorMsg: String? = null
     @Suppress("unused")
     @Deprecated("Use fieldValidator() instead")
     var isValid: Boolean = true
@@ -38,12 +38,12 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         typeArray = context?.theme?.obtainStyledAttributes(attributeSet,
                 R.styleable.TextInputEditTextMask, 0, 0)
 
-        val maskIdentifier = typeArray?.getInt(R.styleable.TextInputEditTextMask_mask, 0)
+        val maskIdentifier = typeArray?.getInt(R.styleable.TextInputEditTextMask_mask, DEFAULT)
         maskErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_mask_errorMsg)
         isRequired = typeArray?.getBoolean(R.styleable.TextInputEditTextMask_required, false) ?: false
         requiredErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_required_errorMsg)
-        range = typeArray?.getString(R.styleable.TextInputEditTextMask_range)
-        rangeErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_range_errorMsg)
+        regexAuxiliary = typeArray?.getString(R.styleable.TextInputEditTextMask_regex_auxiliary)
+        regexAuxiliaryErrorMsg = typeArray?.getString(R.styleable.TextInputEditTextMask_regex_auxiliary_errorMsg)
 
         setMask(maskIdentifier)
 
@@ -70,15 +70,15 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
             }
 
             try {
-                range?.let { pattern ->
+                regexAuxiliary?.let { pattern ->
                     if (Regex(pattern).matches(text)) inputLayout.error = null
                     else {
-                        inputLayout.error = rangeErrorMsg ?: context.getString(R.string.invalid_range)
+                        inputLayout.error = regexAuxiliaryErrorMsg ?: context.getString(R.string.invalid_regex)
                         return false
                     }
                 }
             } catch (e: PatternSyntaxException) {
-                throw PatternSyntaxException("Range is not a valid regex. Valid ex.: [0-99], [2-6], [a-Z]", range, e.index)
+                throw PatternSyntaxException("Regex is not a valid.", regexAuxiliary, e.index)
             }
 
             mask?.let { m ->
@@ -94,7 +94,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     fun setMask(identifier: Int?) {
         if (currentWatcher is CreditCardTextWatcher) setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
         removeTextChangedListener(currentWatcher)
-        mask = MASK.valueOf(identifier)
+        if (identifier != DEFAULT) mask = MASK.valueOf(identifier)
         mask?.getMaxLength().let {
             filters = if (it != null) arrayOf(InputFilter.LengthFilter(it)) else arrayOf()
         }
@@ -106,6 +106,7 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     }
 
     companion object {
+        const val DEFAULT = 0
         const val EMAIL = 100
         const val PHONE = 200
         const val IP = 300
