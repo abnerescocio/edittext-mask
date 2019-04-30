@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity(), MaskAdapter.OnListInteraction {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        is_required.setOnCheckedChangeListener { compoundButton, b ->
+        is_required.setOnCheckedChangeListener { _, b ->
             text_input_edit_text_mask.isRequired = b
             text_input_edit_text_mask.fieldValidator()
         }

@@ -8,6 +8,7 @@
             <enum name="phone" value="200"/>
             <enum name="ip" value="300"/>
             <enum name="web_url" value="400"/>
+            <enum name="credit_card" value="500"/>
             <enum name="brazilian_cpf" value="1003"/>
             <enum name="brazilian_cnpj" value="1004"/>
             <enum name="brazilian_cep" value="1005"/>
@@ -20,9 +21,13 @@
 
         <attr name="required_errorMsg" format="string"/>
 
-        <attr name="range" format="string" />
+        <attr name="range" format="string"/>
 
         <attr name="range_errorMsg" format="string"/>
+
+        <attr name="regex_auxiliary" format="string" />
+
+        <attr name="regex_auxiliary_errorMsg" format="string"/>
 
     </declare-styleable>
 

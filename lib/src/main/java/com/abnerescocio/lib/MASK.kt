@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.abnerescocio.lib.watchers.CEPTextWatcher
 import com.abnerescocio.lib.watchers.CNPJTextWatcher
 import com.abnerescocio.lib.watchers.CPFTextWatcher
-import java.lang.Exception
+import com.abnerescocio.lib.watchers.CreditCardTextWatcher
 
 enum class MASK {
 
@@ -45,9 +45,26 @@ enum class MASK {
 
         override fun getInputType() = InputType.TYPE_CLASS_PHONE
     },
+    
+    CREDIT_CARD {
+    
+        override fun getId() = TextInputEditTextMask.CREDIT_CARD
+
+        override fun getRegex() = Regex(RGX_CREDIT_CARD)
+    
+        override fun getMessage() = R.string.no_match_credit_card
+
+        override fun getWatcher(view: TextView) = CreditCardTextWatcher(view)
+
+        override fun getMaxLength() = 19
+
+        override fun isValid(text: CharSequence) = getRegex().matches(text)
+        
+        override fun getInputType() = InputType.TYPE_CLASS_PHONE
+
+    },
 
     CPF {
-
         override fun getId() = TextInputEditTextMask.BRAZILIAN_CPF
 
         override fun getRegex() = Regex(RGX_CPF)
@@ -185,18 +202,19 @@ enum class MASK {
         override fun getInputType() = InputType.TYPE_CLASS_TEXT
     };
 
-    abstract fun getId(): Int
     abstract fun getRegex(): Regex
     abstract fun getMessage(): Int
     abstract fun getWatcher(view: TextView): TextWatcher?
     abstract fun getMaxLength(): Int?
     abstract fun isValid(text: CharSequence): Boolean
     abstract fun getInputType() : Int
+    abstract fun getId() : Int
 
     companion object {
         const val RGX_CPF = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}|\\d{11}"
         const val RGX_CNPJ = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}|\\d{14}"
         const val RGX_CEP = "\\d{5}-\\d{3}|\\d{8}"
+        const val RGX_CREDIT_CARD = "\\d{4} \\d{4} \\d{4} \\d{4}"
 
         fun valueOf(id: Int?) = values().find { it.getId() == id }
                 ?: throw ClassCastException("The id need be a valid MASK")

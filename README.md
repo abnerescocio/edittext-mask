@@ -18,11 +18,13 @@ allprojects {
 }
 ```
 
-**Step 2.** Add the dependency
+**Step 2.** Add the dependency 
+
+[![](https://jitpack.io/v/abnerescocio/edittext-mask.svg)](https://jitpack.io/#abnerescocio/edittext-mask)
 
 ```
 dependencies {
-    implementation 'com.github.abnerescocio:edittext-mask:1.3.0'
+    implementation 'com.github.abnerescocio:edittext-mask:**version**'
 }
 ```
 
@@ -31,14 +33,7 @@ dependencies {
 **Step 1.** Use the class `TextInputEditTextMask` on your xml layout
 
 ```
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
-    tools:context=".MainActivity">
+...
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -48,41 +43,47 @@ dependencies {
             android:id="@+id/text_input_edit_text_mask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"
-            app:mask="phone"
-            app:mask_errorMsg="Wrong phone number"
+            app:mask="email"
+            app:mask_errorMsg="Invalid email"
+            app:regex_auxiliary="^(?!.*test).*$"
+            app:regex_auxiliary_errorMsg="You can't use test"
             app:required="true"
             app:required_errorMsg="Required field*"
             />
 
     </android.support.design.widget.TextInputLayout>
 
-</LinearLayout>
+...
 ```
-**Step 2.** Understending attrs
+### Use of required field
+![screenshot1](https://github.com/abnerescocio/edittext-mask/blob/alpha/screenshot_1.png)
 
-The class has 6 public attrs that can be set on your xml or on your class java/kotlin
+### Use of email mask
+![screenshot2](https://github.com/abnerescocio/edittext-mask/blob/alpha/screenshot_2.png)
 
-**Mask:** The mask that you need put on field
-* `app:mask`: `phone`, `email`, `brazilian_cpf` and more
-* `setMask(identifier: Int)`: `TextInputEditTextMask.PHONE`, `TextInputEditTextMask.EMAIL`, `TextInputEditTextMask.BRAZILIAN_CPF` and more
+### Use of regex auxiliary
+![screenshot3](https://github.com/abnerescocio/edittext-mask/blob/alpha/screenshot_3.png)
 
-**Mask message error to wrong mask:** A string that will show a message when user input a wrong mask
-* `app:mask_errorMsg`: "Invalid value" or `@string/invalid_value`
-* `setMaskErrorMsg(msg: String)`: "Invalid value" or `getString(R.string.invalid_value)`
+**Step 2.** The use of attrs
 
-**Required field** A boolean value that define if field is required or not
-* `app:required`: true or false
-* `setRequired(isRequired: Boolean)`: true or false
+Mask | Example
+------------ | -------------
+phone | 85 98765-4321
+email | abner@email.com
+credit card | 2236 9958 4578 5131
+cpf | 986.909.630-14
+cnpj | 32.338.068/0001-71
+cep | 60650-140
+ip | 192.168.1.10
+web url | www.google.com
 
-**Required message error to empty field** A string that will show a message when user not type any thing
-* `app:required_errorMsg`: "Required field" or `@string/required_field`
-* `setRequiredErrorMsg(msg: String)`: "Required field" or `getString(R.string.required_field)`
+Regex auxliary | Example
+------------ | -------------
+Can't use test | ^(?!.\*test).\*$
+Need input 5 characters | \\d{5,}
+Use just letters | [a-zA-Z]
+Use just numbers | [0-9]
 
-**Range** The Regular Expression that delimiter the user inputs. For example, if the user must be input a value between 1 to 4 use `app:range="[1-4]"`
-* `app:range`: "[1-4]", "[a-z]", "[A-Z]", "[0-99]" and infinite possibles
-* `setRange(regex: String)`: "[1-4]", "[a-z]", "[A-Z]", "[0-99]" and infinite possibles
-
-**Range message error to wrong interval** A string that will show a message when user not type a value inside range
-* `app:range_errorMsg`: "Invalid range. Need be between 1 to 4" or `@string/invalid_range`
-* `setRangeErrorMsg(msg: String)`: "Invalid range. Need be between 1 to 4" or `getString(R.string.invalid_range)`
+Required | Example
+------------ | -------------
+Need be | true or false
