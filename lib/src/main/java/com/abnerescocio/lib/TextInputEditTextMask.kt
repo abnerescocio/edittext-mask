@@ -54,11 +54,6 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         fieldValidator()
     }
 
-    override fun requestFocus(direction: Int, previouslyFocusedRect: Rect?): Boolean {
-        fieldValidator()
-        return super.requestFocus(direction, previouslyFocusedRect)
-    }
-
     fun fieldValidator() : Boolean {
         val inputLayout = parent?.parent
         if (inputLayout is TextInputLayout) {
