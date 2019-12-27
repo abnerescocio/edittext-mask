@@ -2,7 +2,6 @@ package com.abnerescocio.lib
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Rect
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.text.InputFilter
@@ -58,17 +57,17 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
         val inputLayout = parent?.parent
         if (inputLayout is TextInputLayout) {
             if (isRequired && text.isNullOrEmpty()) {
-                inputLayout.error = requiredErrorMsg ?: context.getString(R.string.required_field)
+                setErrorOnParent(requiredErrorMsg ?: context.getString(R.string.required_field))
                 return false
             } else if (isRequired && text.isNotEmpty()) {
-                inputLayout.error = null
+                setErrorOnParent(null)
             }
 
             try {
                 regexAuxiliary?.let { pattern ->
-                    if (Regex(pattern).matches(text)) inputLayout.error = null
+                    if (Regex(pattern).matches(text)) setErrorOnParent(null)
                     else {
-                        inputLayout.error = regexAuxiliaryErrorMsg ?: context.getString(R.string.invalid_regex)
+                        setErrorOnParent(regexAuxiliaryErrorMsg ?: context.getString(R.string.invalid_regex))
                         return false
                     }
                 }
@@ -77,13 +76,23 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
             }
 
             mask?.let { m ->
-                if (m.isValid(text)) inputLayout.error = null
-                else inputLayout.error = maskErrorMsg ?: context.getString(m.getMessage())
+                if (m.isValid(text)) setErrorOnParent(null)
+                else setErrorOnParent(maskErrorMsg ?: context.getString(m.getMessage()))
             }
 
             return inputLayout.error == null
         }
         return false
+    }
+
+    private fun setErrorOnParent(error: String?) {
+        try {
+            val textInputLayout = parent.parent as TextInputLayout
+            textInputLayout.isErrorEnabled = error != null
+            textInputLayout.error = error
+        } catch (e: java.lang.ClassCastException) {
+            e.printStackTrace()
+        }
     }
 
     fun setMask(identifier: Int?) {
