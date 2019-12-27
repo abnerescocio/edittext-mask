@@ -7,6 +7,8 @@ import android.support.design.widget.TextInputLayout
 import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.View
+import android.widget.EditText
 import com.abnerescocio.lib.watchers.CreditCardTextWatcher
 import java.util.regex.PatternSyntaxException
 
@@ -50,48 +52,53 @@ class TextInputEditTextMask(context: Context?, attributeSet: AttributeSet?)
     }
 
     override fun onTextChanged(text: CharSequence, start: Int, lengthBefore: Int, lengthAfter: Int) {
-        fieldValidator()
+        if (text.isNotBlank()) fieldValidator()
     }
 
     fun fieldValidator() : Boolean {
-        val inputLayout = parent?.parent
-        if (inputLayout is TextInputLayout) {
-            if (isRequired && text.isNullOrEmpty()) {
-                setErrorOnParent(requiredErrorMsg ?: context.getString(R.string.required_field))
-                return false
-            } else if (isRequired && text.isNotEmpty()) {
-                setErrorOnParent(null)
-            }
+        if (isRequired && text.isNullOrEmpty()) {
+            return showErrorOnLayout(requiredErrorMsg ?: context.getString(R.string.required_field))
+        } else if (isRequired && text.isNotEmpty()) {
+            showErrorOnLayout(null)
+        }
 
-            try {
-                regexAuxiliary?.let { pattern ->
-                    if (Regex(pattern).matches(text)) setErrorOnParent(null)
-                    else {
-                        setErrorOnParent(regexAuxiliaryErrorMsg ?: context.getString(R.string.invalid_regex))
-                        return false
-                    }
+        try {
+            regexAuxiliary?.let { pattern ->
+                if (Regex(pattern).matches(text)) showErrorOnLayout(null)
+                else {
+                    return showErrorOnLayout(regexAuxiliaryErrorMsg ?: context.getString(R.string.invalid_regex))
                 }
-            } catch (e: PatternSyntaxException) {
-                throw PatternSyntaxException("Regex is not a valid.", regexAuxiliary, e.index)
             }
+        } catch (e: PatternSyntaxException) {
+            throw PatternSyntaxException("Regex is not a valid.", regexAuxiliary, e.index)
+        }
 
-            mask?.let { m ->
-                if (m.isValid(text)) setErrorOnParent(null)
-                else setErrorOnParent(maskErrorMsg ?: context.getString(m.getMessage()))
+        mask?.let { m ->
+            if (m.isValid(text)) showErrorOnLayout(null)
+            else {
+                return showErrorOnLayout(maskErrorMsg ?: context.getString(m.getMessage()))
             }
-
-            return inputLayout.error == null
         }
         return false
     }
 
-    private fun setErrorOnParent(error: String?) {
-        try {
-            val textInputLayout = parent.parent as TextInputLayout
-            textInputLayout.isErrorEnabled = error != null
-            textInputLayout.error = error
-        } catch (e: java.lang.ClassCastException) {
-            e.printStackTrace()
+    private fun showErrorOnLayout(error: String?): Boolean {
+        val hasError = error != null
+        val layoutToShowError: View? = getLayoutToShowError()
+        if (layoutToShowError is TextInputLayout) {
+            layoutToShowError.isErrorEnabled = hasError
+            layoutToShowError.error = error
+        } else if (layoutToShowError is EditText) {
+            layoutToShowError.error = error
+        }
+        return hasError
+    }
+
+    private fun getLayoutToShowError(): View {
+        return try {
+            parent!!.parent as TextInputLayout
+        } catch (e: Exception) {
+            this
         }
     }
 
